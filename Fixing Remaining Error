@@ -1,0 +1,10 @@
+-- Deleting ride_ids with over or under 16 characters
+
+CREATE OR REPLACE TABLE
+  `secret-reactor-425810-i8.tripdata_2023.cleaned_tripdata_2023` AS
+SELECT
+  *
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.new_combined_tripdata_2023`
+WHERE
+  LENGTH(ride_id) = 16;
