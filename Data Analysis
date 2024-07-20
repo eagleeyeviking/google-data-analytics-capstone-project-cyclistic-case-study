@@ -1,0 +1,276 @@
+-- Frequency of Rides by Each Customer
+
+SELECT
+  member_casual,
+  COUNT(member_casual) AS rider_type_frequency
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  member_casual;
+
+
+-- Average Trip Duration for Each Customer
+
+SELECT
+  member_casual,
+  TIME(TIMESTAMP_SECONDS(CAST(FLOOR(AVG(ride_length_in_seconds)) AS INT64)), "UTC") AS average_duration
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  member_casual;
+
+
+-- Preferred Rideable Type by Each Customer
+
+  SELECT
+  rideable_type,
+  COUNTIF(member_casual = 'member') AS member_rides,
+  COUNTIF(member_casual = 'casual') AS casual_rides,
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  rideable_type
+ORDER BY
+  rideable_type;
+
+
+-- Average Ride Duration for Each Type of Customer with Each Type of Bike
+  SELECT
+  rideable_type,
+  member_casual,
+  TIME(TIMESTAMP_SECONDS(CAST(FLOOR(AVG(ride_length_in_seconds)) AS INT64)), "UTC") AS average_ride_duration
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  rideable_type,
+  member_casual
+ORDER BY
+  rideable_type,
+  member_casual;
+  
+-- Monthly Frequency of Rides for Each Type of Customer
+WITH
+  month_names AS (
+  SELECT
+    FORMAT_TIMESTAMP('%B', TIMESTAMP_TRUNC(began_at, MONTH, 'UTC')) AS month_name,
+    EXTRACT(MONTH
+    FROM
+      began_at AT TIME ZONE 'UTC') AS month_num,
+    COUNTIF(member_casual = 'member') AS member_rides,
+    COUNTIF(member_casual = 'casual') AS casual_rides
+  FROM
+    `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+  GROUP BY
+    month_name,
+    month_num )
+SELECT
+  month_name,
+  member_rides,
+  casual_rides
+FROM
+  month_names
+ORDER BY
+  month_num;
+  
+  
+-- Average Ride Duration for Each Type of Customer based on the Month of the Year
+WITH
+  month_names AS (
+  SELECT
+    FORMAT_TIMESTAMP('%B', TIMESTAMP_TRUNC(began_at, MONTH, 'UTC')) AS month_name,
+    EXTRACT(MONTH
+    FROM
+      began_at AT TIME ZONE 'UTC') AS month_num,
+    member_casual,
+    TIME(TIMESTAMP_SECONDS(CAST(FLOOR(AVG(ride_length_in_seconds)) AS INT64)), "UTC") AS average_ride_duration
+  FROM
+    `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+  GROUP BY
+    month_name,
+    month_num,
+    member_casual )
+SELECT
+  month_name,
+  member_casual,
+  average_ride_duration
+FROM
+  month_names
+ORDER BY
+  month_num ASC,
+  member_casual;
+
+  
+-- Weekly Frequency of Rides for Each Type of Customer
+SELECT
+  CASE day_of_week
+    WHEN 1 THEN 'Sunday'
+    WHEN 2 THEN 'Monday'
+    WHEN 3 THEN 'Tuesday'
+    WHEN 4 THEN 'Wednesday'
+    WHEN 5 THEN 'Thursday'
+    WHEN 6 THEN 'Friday'
+    WHEN 7 THEN 'Saturday'
+END
+  AS day_of_week_name,
+  COUNTIF(member_casual = 'member') AS member_rides,
+  COUNTIF(member_casual = 'casual') AS casual_rides
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  day_of_week
+ORDER BY
+  day_of_week;
+
+
+-- Average Ride Duration for Each Type of Customer based on the Day of the Week
+  SELECT
+  CASE day_of_week
+    WHEN 1 THEN 'Sunday'
+    WHEN 2 THEN 'Monday'
+    WHEN 3 THEN 'Tuesday'
+    WHEN 4 THEN 'Wednesday'
+    WHEN 5 THEN 'Thursday'
+    WHEN 6 THEN 'Friday'
+    WHEN 7 THEN 'Saturday'
+END
+  AS day_of_week_name,
+  member_casual,
+  TIME(TIMESTAMP_SECONDS(CAST(FLOOR(AVG(ride_length_in_seconds)) AS INT64)), "UTC") AS average_ride_duration
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  day_of_week,
+  member_casual
+ORDER BY
+  day_of_week,
+  member_casual;
+  
+  
+-- Hourly Frequency of Rides for Each Type of Customer
+SELECT
+  FORMAT('%02d:00:00 - %02d:59:59', EXTRACT(HOUR
+    FROM
+      began_at AT TIME ZONE 'UTC'), EXTRACT(HOUR
+    FROM
+      began_at AT TIME ZONE 'UTC')) AS hour_range,
+  COUNTIF(member_casual = 'member') AS member_rides,
+  COUNTIF(member_casual = 'casual') AS casual_rides
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  hour_range
+ORDER BY
+  hour_range;
+  
+  
+-- Average Ride Duration for Each Type of Customer based on the Hour of the Day
+SELECT
+  FORMAT('%02d:00:00 - %02d:59:59', EXTRACT(HOUR
+    FROM
+      began_at AT TIME ZONE 'UTC'), EXTRACT(HOUR
+    FROM
+      began_at AT TIME ZONE 'UTC')) AS hour_range,
+  member_casual,
+  TIME(TIMESTAMP_SECONDS(CAST(FLOOR(AVG(ride_length_in_seconds)) AS INT64)), "UTC") AS average_ride_duration
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+GROUP BY
+  hour_range,
+  member_casual
+ORDER BY
+  hour_range,
+  member_casual;
+  
+  
+-- Most Frequent Starting Stations for Each Type of Customer
+WITH
+  member_start_stations AS (
+  SELECT
+    start_station_name,
+    COUNT(*) AS ride_count,
+    'member' AS rider_type
+  FROM
+    `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+  WHERE
+    member_casual = 'member'
+    AND start_station_name IS NOT NULL
+  GROUP BY
+    start_station_name
+  ORDER BY
+    ride_count DESC
+  LIMIT
+    10 ),
+  casual_start_stations AS (
+  SELECT
+    start_station_name,
+    COUNT(*) AS ride_count,
+    'casual' AS rider_type
+  FROM
+    `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+  WHERE
+    member_casual = 'casual'
+    AND start_station_name IS NOT NULL
+  GROUP BY
+    start_station_name
+  ORDER BY
+    ride_count DESC
+  LIMIT
+    10 )
+SELECT
+  *
+FROM
+  member_start_stations
+UNION ALL
+SELECT
+  *
+FROM
+  casual_start_stations;
+
+  
+-- Most Frequent Ending Stations for Each Type of Customer
+WITH
+  member_end_stations AS (
+  SELECT
+    end_station_name,
+    COUNT(*) AS ride_count,
+    'member' AS rider_type
+  FROM
+    `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+  WHERE
+    member_casual = 'member'
+    AND end_station_name IS NOT NULL
+  GROUP BY
+    end_station_name
+  ORDER BY
+    ride_count DESC
+  LIMIT
+    10 ),
+  casual_end_stations AS (
+  SELECT
+    end_station_name,
+    COUNT(*) AS ride_count,
+    'casual' AS rider_type
+  FROM
+    `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023`
+  WHERE
+    member_casual = 'casual'
+    AND end_station_name IS NOT NULL
+  GROUP BY
+    end_station_name
+  ORDER BY
+    ride_count DESC
+  LIMIT
+    10 )
+SELECT
+  *
+FROM
+  member_end_stations
+UNION ALL
+SELECT
+  *
+FROM
+  casual_end_stations;
+
+
+  
+  
