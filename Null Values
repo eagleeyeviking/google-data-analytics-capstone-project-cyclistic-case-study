@@ -1,0 +1,20 @@
+-- Searching for null values
+
+SELECT
+  COUNTIF(ride_id IS NULL) AS null_ride_id_values,
+  COUNTIF(rideable_type IS NULL) AS null_rideable_type_values,
+  COUNTIF(began_at IS NULL) AS null_began_at_value_values,
+  COUNTIF(finished_at IS NULL) AS null_finished_at_values,
+  COUNTIF(ride_length_in_seconds IS NULL) AS null_ride_length_in_seconds_values,
+  COUNTIF(day_of_week IS NULL) AS null_day_of_week_values,
+  COUNTIF(start_station_name IS NULL) AS null_start_station_name_values,
+  COUNTIF(start_station_id IS NULL) AS null_start_station_id_values,
+  COUNTIF(end_station_name IS NULL) AS null_end_station_name_values,
+  COUNTIF(end_station_id IS NULL) AS null_end_station_id_values,
+  COUNTIF(start_lat IS NULL) AS null_start_lat_values,
+  COUNTIF(start_lng IS NULL) AS null_start_lng_values,
+  COUNTIF(end_lat IS NULL) AS null_end_lat_values,
+  COUNTIF(end_lng IS NULL) AS null_end_lng_values,
+  COUNTIF(member_casual IS NULL) AS null_member_casual_values
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.cleaned_tripdata_2023`;
