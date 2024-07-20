@@ -1,0 +1,17 @@
+-- Creating a cleaned table while converting day of week to make my future analysis more understandable to stakeholders
+
+CREATE OR REPLACE TABLE `secret-reactor-425810-i8.tripdata_2023.final_tripdata_2023` AS
+SELECT
+  *,
+  CASE day_of_week
+    WHEN 1 THEN 'Sunday'
+    WHEN 2 THEN 'Monday'
+    WHEN 3 THEN 'Tuesday'
+    WHEN 4 THEN 'Wednesday'
+    WHEN 5 THEN 'Thursday'
+    WHEN 6 THEN 'Friday'
+    WHEN 7 THEN 'Saturday'
+    ELSE 'Unknown'  -- Handle unexpected values if any
+  END AS day_of_week_name
+FROM
+  `secret-reactor-425810-i8.tripdata_2023.cleaned_tripdata_2023`;
