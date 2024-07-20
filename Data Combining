@@ -1,0 +1,411 @@
+-- Joined 17 tables together while fixing wrong data types, and cleaning data (such as values of over 24 hours, under 1 minute, and where ended_at is before started_at) 
+  
+CREATE TABLE
+  `tripdata_2023.combined_tripdata_2023` AS (
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at, -- Here, I change the STRING data type to TIMESTAMP
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week, -- Here, I change the STRING data type to INTEGER
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_jan2023`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_feb2023`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_mar2023`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_apr2023`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_may2023_1`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_may2023_2`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_jun2023_1`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_jun2023_2`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_jul2023_1`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_jul2023_2`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_aug2023_1`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_aug2023_2`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_sep2023_1`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_sep2023_2`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_oct2023`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_nov2023`
+  WHERE
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1
+  UNION ALL
+  SELECT
+    ride_id,
+    rideable_type,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', started_at) AS began_at,
+    PARSE_TIMESTAMP('%d/%m/%y %H.%M', ended_at) AS finished_at,
+    (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 + CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) AS ride_length_in_seconds,
+    day_of_week,
+    start_station_name,
+    start_station_id,
+    end_station_name,
+    end_station_id,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng,
+    member_casual
+  FROM
+    `tripdata_2023.tripdata_dec2023`
+  WHERE -- Here, I remove ride_length values that are above 24 hours and under 1 minute
+    CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) < 24
+    AND (CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(0)] AS INT64) * 3600 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(1)] AS INT64) * 60 +
+           CAST(SPLIT(ride_length, '.')[SAFE_OFFSET(2)] AS INT64)) > 1);
